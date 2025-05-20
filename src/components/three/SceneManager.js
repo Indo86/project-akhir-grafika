@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three-stdlib'
 import { makeObject } from './ObjectFactory.js'
+import { DragControls } from 'three-stdlib'
 
 export default class SceneManager {
   constructor(container) {
@@ -29,7 +30,10 @@ export default class SceneManager {
     this.objects = []
     this.counts  = {}  // untuk hitung berapa instance tiap tipe
     this.revolvers = []; 
+     this.dragControls = null
+
     this.animate = this.animate.bind(this)
+   
   }
 
   addObject(type, material, options) {
@@ -89,6 +93,28 @@ export default class SceneManager {
     return axes
   }
 
+    _reinitDrag() {
+    // dispose old DragControls
+    if (this.dragControls) {
+      this.dragControls.dispose()
+    }
+    // create new one with up-to-date object list
+    this.dragControls = new DragControls(
+      this.objects,
+      this.camera,
+      this.renderer.domElement
+    )
+    // saat drag mulai, matikan OrbitControls
+    this.dragControls.addEventListener('dragstart', () => {
+      this.controls.enabled = false
+    })
+    // saat drag selesai, hidupkan OrbitControls lagi
+    this.dragControls.addEventListener('dragend', () => {
+      this.controls.enabled = true
+    })
+  }
+
+
   // toggle visibility seluruh axes
   toggleAxes(show) {
     this.fullAxes.visible = show
@@ -119,7 +145,10 @@ export default class SceneManager {
         // (opsional) reset posisi mesh ke (0,0,0) atau biarkan posisi terakhir
       }
     }
-  start() { this.animate() }
+  start() { 
+    this._reinitDrag()
+    this.animate() 
+  }
 
   animate() {
     requestAnimationFrame(this.animate)

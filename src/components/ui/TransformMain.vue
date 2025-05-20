@@ -1,7 +1,5 @@
-
-
 <script setup>
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
 import * as THREE from 'three'
 import { useScene } from '@/composables/useScene'
 import ObjectSelector   from './ui-part/ObjectSelector.vue'
@@ -150,6 +148,40 @@ function selectObject(i) {
     wireframe: m.wireframe
   }
 }
+
+// 9. Kontrol keyboard
+function onKeyDown(e) {
+  if (!selected.value) return
+  const step = 0.1
+  const pos = transform.value.position
+
+  switch (e.key) {
+    // Arrow keys pindah di X/Z
+    case 'ArrowUp':    pos.z -= step; break
+    case 'ArrowDown':  pos.z += step; break
+    case 'ArrowLeft':  pos.x -= step; break
+    case 'ArrowRight': pos.x += step; break
+
+    // PageUp/PageDown pindah di Y
+    case 'PageUp':     pos.y += step; break
+    case 'PageDown':   pos.y -= step; break
+
+    // tambahan: WASD untuk X/Z juga bisa
+    case 'w': pos.z -= step; break
+    case 's': pos.z += step; break
+    case 'a': pos.x -= step; break
+    case 'd': pos.x += step; break
+  }
+}
+
+// pasang dan lepas listener
+onMounted(() => {
+  window.addEventListener('keydown', onKeyDown)
+})
+onBeforeUnmount(() => {
+  window.removeEventListener('keydown', onKeyDown)
+})
+
 
 // add / dup / remove
 function addObject(type) {
