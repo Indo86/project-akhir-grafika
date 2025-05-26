@@ -1,10 +1,8 @@
-# project-akhir-grafika
+# project-akhir-grafika ini di buat oleh: 
+## 1. Deni Norman Zaky 123220165 (Ketua)
+## 2. Resti Ramadhani 123220147 (Anggota)
 
-## Project ini di buat oleh
-1. Deni Norman Zaky 123220165 (Ketua)
-2. Resti Ramadhani 123220147 (Anggota)
-
-This template should help get you started developing with Vue 3 in Vite.
+## Grafika Komputer dan Multimedia IF-E 
 
 ## Recommended IDE Setup
 
